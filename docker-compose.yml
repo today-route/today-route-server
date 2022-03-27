@@ -1,0 +1,21 @@
+services:
+  server:
+    container_name: server
+    build: 
+      context: .
+    ports:
+      - 4000:4000
+    command: pm2-docker /dist/main.js
+
+
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: example
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
