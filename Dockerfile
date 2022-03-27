@@ -1,13 +1,11 @@
-FROM node:14-alpine
+FROM node:16.14.2-alpine
 
-COPY package*.json /
+COPY . .
 
 RUN npm install --save-dev
 
 RUN npm install -g pm2
 
-COPY . .
-
 RUN npm run build
 
-RUN ls ./dist
+ENTRYPOINT ["pm2-runtime", "/dist/main.js"]
