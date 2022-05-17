@@ -6,6 +6,9 @@
 .env
 .env.dev
 
+# database
+/mysql
+
 # Logs
 logs
 *.log
