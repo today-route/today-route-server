@@ -1,11 +1,4 @@
 services:
-  server:
-    container_name: server
-    build: 
-      context: .
-    ports:
-      - 4000:4000
-
   db:
     platform: linux/x86_64
     container_name: db
@@ -17,13 +10,33 @@ services:
     ports:
       - ${DB_PORT}:3306
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      # MYSQL_RANDOM_ROOT_PASSWORD: yes
       MYSQL_USER: ${DB_USER_NAME}
       MYSQL_PASSWORD: ${DB_USER_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME} 
-      
+      MYSQL_DATABASE: ${DB_NAME}
+
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
+  server:
+    container_name: server
+    build:
+      context: .
+    ports:
+      - 4000:4000
+
+  # server:
+  #   container_name: server
+  #   build:
+  #     context: .
+  #   ports:
+  #     - 4000:4000
+  #   command:
+  #     - bash
+  #     - -c
+  #     - |
+  #       /wait-for-it.sh db:3306 -t 10
+  #       pm2-docker /dist/main.js
