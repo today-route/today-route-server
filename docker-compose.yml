@@ -22,7 +22,6 @@ services:
       - 8080:8080
 
   server:
-    container_name: server
     build:
       context: .
     ports:
