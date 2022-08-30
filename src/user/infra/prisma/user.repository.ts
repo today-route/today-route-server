@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from '../../domain/dto/user.dto';
 import { PrismaService } from '../../../prisma.service';
+import { CreateUserDao, UpdateUserDao } from '../../domain/dao/user.dao';
 import UserEntity from '../../domain/entity/user.entity';
 import IUserRepository from '../../domain/repository/user.repository';
 
@@ -8,10 +8,10 @@ import IUserRepository from '../../domain/repository/user.repository';
 export class UserRepository implements IUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  public async create(createUserDto: CreateUserDto) {
-    const user = await this.prismaService.user.create({ data: createUserDto });
+  public async create(createUserDao: CreateUserDao) {
+    const user = await this.prismaService.user.create({ data: createUserDao });
 
-    return new UserEntity(user);
+    return new UserEntity({ ...user });
   }
 
   public async findById(id: number): Promise<UserEntity> {
@@ -29,10 +29,10 @@ export class UserRepository implements IUserRepository {
     return this.prismaService.user.findMany();
   }
 
-  public async update(email: string, updateUserDto: UpdateUserDto) {
+  public async update(email: string, updateUserDao: UpdateUserDao) {
     const user = await this.prismaService.user.update({
       where: { email },
-      data: updateUserDto,
+      data: updateUserDao,
     });
 
     return new UserEntity(user);

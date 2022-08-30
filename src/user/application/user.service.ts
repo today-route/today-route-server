@@ -10,7 +10,9 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.userRepository.create(createUserDto);
+    const code = 'abcd';
+
+    const user = await this.userRepository.create({ ...createUserDto, code });
     return new UserEntity(user);
   }
 

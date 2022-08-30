@@ -1,13 +1,14 @@
-export type CreateUserDto = {
+export type CreateUserDao = {
   email: string;
   key: string;
+  code: string;
   gender: string;
   nickname: string;
   profileUrl: string;
   birthday: string;
 };
 
-export type UpdateUserDto = {
+export type UpdateUserDao = {
   nickname?: string;
   profileUrl?: string;
 };

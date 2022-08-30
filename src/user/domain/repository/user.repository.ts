@@ -1,10 +1,10 @@
-import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { CreateUserDao, UpdateUserDao } from '../dao/user.dao';
 import UserEntity from '../entity/user.entity';
 
 export default interface IUserRepository {
-  create(createUserDto: CreateUserDto): Promise<UserEntity>;
+  create(createUserDao: CreateUserDao): Promise<UserEntity>;
   findById(id: number): Promise<UserEntity>;
   findByEmail(email: string): Promise<UserEntity>;
   findAll(): Promise<UserEntity[]>;
-  update(email: string, updateUserDto: UpdateUserDto): Promise<UserEntity>;
+  update(email: string, updateUserDao: UpdateUserDao): Promise<UserEntity>;
 }
