@@ -1,7 +1,9 @@
+import { Gender } from '../entity/user.entity';
+
 export type CreateUserDto = {
-  email: string;
   key: string;
-  gender: string;
+  email: string;
+  gender: Gender;
   nickname: string;
   profileUrl: string;
   birthday: string;

@@ -1,22 +1,29 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma.service';
+import { CreateUserDao } from '../domain/dao/user.dao';
 import { CreateUserDto, UpdateUserDto } from '../domain/dto/user.dto';
 
 import UserEntity from '../domain/entity/user.entity';
+import { CodeService } from '../infra/code.service';
 import { UserRepository } from '../infra/prisma/user.repository';
 import { UserService } from './user.service';
 
 describe('test user service', () => {
   let repository: UserRepository;
-  let service: UserService;
+  let userService: UserService;
+  let codeService: CodeService;
 
   const userData: UserEntity = {
     id: 1,
     key: 'key',
+    code: '123456',
     email: 'test@gmail.com',
+    gender: 'M',
     nickname: 'test',
-    introduction: 'hello',
     profileUrl: 'image link',
+    birthday: new Date(),
+    createdAt: new Date(),
+    deletedAt: null,
   };
 
   beforeAll(async () => {
@@ -26,32 +33,36 @@ describe('test user service', () => {
         UserService,
         { provide: PrismaService, useValue: { user: jest.fn() } },
         { provide: 'USER_REPOSITORY', useValue: { create: jest.fn() } },
+        CodeService,
       ],
     }).compile();
 
     repository = module.get('USER_REPOSITORY');
-    service = module.get<UserService>(UserService);
+    userService = module.get<UserService>(UserService);
+    codeService = module.get<CodeService>(CodeService);
   });
 
   it('create user', async () => {
     // Given
     const userDto: CreateUserDto = {
       ...userData,
+      birthday: '2000-01-01',
     };
 
-    repository.create = jest.fn(() =>
-      Promise.resolve(new UserEntity({ id: 1, ...userDto })),
+    const code = codeService.createCode();
+
+    repository.create = jest.fn((createUserDao: CreateUserDao) =>
+      Promise.resolve(new UserEntity({ ...createUserDao, id: 1, code })),
     );
 
     // When
-    const userEntity = await service.create(userDto);
+    const userEntity = await userService.create(userDto);
 
     // Then
 
     expect(userEntity.email).toBe(userDto.email);
     expect(userEntity.nickname).toBe(userDto.nickname);
     expect(userEntity.profileUrl).toBe(userDto.profileUrl);
-    expect(userEntity.introduction).toBe(userDto.introduction);
   });
 
   it('find user by id', async () => {
@@ -68,7 +79,7 @@ describe('test user service', () => {
     });
 
     // When
-    const user = await service.findById(id);
+    const user = await userService.findById(id);
 
     // Then
     expect(user.id).toBe(id);
@@ -89,7 +100,7 @@ describe('test user service', () => {
     });
 
     // When
-    const user = await service.findByEmail(email);
+    const user = await userService.findByEmail(email);
 
     // Then
     expect(user.email).toBe(email);

@@ -1,11 +1,13 @@
+import { Gender } from '../entity/user.entity';
+
 export type CreateUserDao = {
   email: string;
   key: string;
   code: string;
-  gender: string;
+  gender: Gender;
   nickname: string;
   profileUrl: string;
-  birthday: string;
+  birthday: Date;
 };
 
 export type UpdateUserDao = {

@@ -1,19 +1,25 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import { CreateUserDto, UpdateUserDto } from '../domain/dto/user.dto';
 import UserEntity from '../domain/entity/user.entity';
 import IUserRepository from '../domain/repository/user.repository';
+import ICodeService from './code.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('USER_REPOSITORY') private userRepository: IUserRepository,
+    @Inject('CODE_SERVICE') private codeService: ICodeService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const code = 'abcd';
+    const code = this.codeService.createCode();
 
-    const user = await this.userRepository.create({ ...createUserDto, code });
-    return new UserEntity(user);
+    return await this.userRepository.create({
+      ...createUserDto,
+      birthday: new Date(createUserDto.birthday),
+      code,
+    });
   }
 
   async findById(id: number) {
