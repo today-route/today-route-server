@@ -1,15 +1,40 @@
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
+import { DTO_VALIDATION_ERROR_MESSAGE } from 'src/constants/errorMessage';
+import { IsGender } from 'src/utils/isGender';
 import { Gender } from '../entity/user.entity';
 
-export type CreateUserDto = {
-  key: string;
-  email: string;
-  gender: Gender;
-  nickname: string;
-  profileUrl: string;
-  birthday: string;
-};
+export class CreateUserDto {
+  @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly key: string;
 
-export type UpdateUserDto = {
-  nickname?: string;
-  profileUrl?: string;
-};
+  @IsEmail({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly email: string;
+
+  @IsGender({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly gender: Gender;
+
+  @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly nickname: string;
+
+  @IsUrl({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly profileUrl: string;
+
+  @IsDateString({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly birthday: string;
+}
+
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly nickname?: string;
+
+  @IsOptional()
+  @IsUrl({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  readonly profileUrl?: string;
+}

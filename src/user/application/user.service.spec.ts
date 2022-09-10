@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma.service';
 import { CreateUserDao } from '../domain/dao/user.dao';
-import { CreateUserDto, UpdateUserDto } from '../domain/dto/user.dto';
+import { CreateUserDto } from '../domain/dto/user.dto';
 
 import UserEntity from '../domain/entity/user.entity';
 import { CodeService } from '../infra/code.service';
