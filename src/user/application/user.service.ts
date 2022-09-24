@@ -1,7 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import TokenDto from 'src/auth/auth.dto';
 import AuthService from 'src/auth/auth.service';
-
+import TokenDto from '../domain/dto/token.dto';
 import { CreateUserDto, UpdateUserDto } from '../domain/dto/user.dto';
 import UserEntity from '../domain/entity/user.entity';
 import IUserRepository from '../domain/repository/user.repository';
@@ -12,7 +11,7 @@ export class UserService {
   constructor(
     @Inject('USER_REPOSITORY') private userRepository: IUserRepository,
     @Inject('CODE_SERVICE') private codeService: ICodeService,
-    @Inject('AUTH_SERVICE') private authService: AuthService,
+    private authService: AuthService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<TokenDto> {

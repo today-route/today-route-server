@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../prisma.service';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateUserDao, UpdateUserDao } from '../../domain/dao/user.dao';
 import UserEntity from '../../domain/entity/user.entity';
 import IUserRepository from '../../domain/repository/user.repository';
@@ -12,7 +12,6 @@ export class UserRepository implements IUserRepository {
     const user = await this.prismaService.user.create({
       data: createUserDao,
     });
-
     return new UserEntity({ ...user });
   }
 
