@@ -5,6 +5,7 @@ import {
   Body,
   Patch,
   Param,
+  NotFoundException,
   // Delete,
 } from '@nestjs/common';
 import { UserService } from '../application/user.service';
@@ -19,19 +20,22 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Post('/login')
+  login(@Body() authDto: { key: string }) {
+    return this.userService.login(authDto.key);
+  }
+
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findById(@Param('id') id: number) {
-    return this.userService.findById(id);
-  }
-
   @Get(':email')
-  findByEmail(@Param('email') email: string) {
-    return this.userService.findByEmail(email);
+  async findByEmail(@Param('email') email: string) {
+    const user = await this.userService.findByEmail(email);
+
+    if (user === null) throw new NotFoundException();
+    return user;
   }
 
   @Patch(':email')

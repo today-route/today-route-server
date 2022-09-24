@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import AuthService from 'src/auth/auth.service';
 import { PrismaService } from '../prisma.service';
 import { UserService } from './application/user.service';
 import { CodeService } from './infra/code.service';
@@ -13,6 +14,7 @@ import { UserController } from './interface/user.controller';
     UserService,
     { provide: 'CODE_SERVICE', useClass: CodeService },
     { provide: 'USER_REPOSITORY', useClass: UserRepository },
+    { provide: 'AUTH_SERVICE', useClass: AuthService },
   ],
 })
 export class UserModule {}
