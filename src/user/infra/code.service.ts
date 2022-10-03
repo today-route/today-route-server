@@ -5,6 +5,6 @@ import ICodeService from '../application/code.service';
 @Injectable()
 export class CodeService implements ICodeService {
   public createCode() {
-    return customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 6)();
+    return customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6)();
   }
 }

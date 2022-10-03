@@ -23,10 +23,7 @@ export class UserService {
       code,
     });
 
-    return {
-      access: this.authService.createAccessToken({ ...user }),
-      refresh: this.authService.createRefreshToken({ ...user }),
-    };
+    return this.authService.login(user.id);
   }
 
   async login(key: string): Promise<TokenDto> {
@@ -36,14 +33,15 @@ export class UserService {
       throw new NotFoundException('존재하지 않는 회원입니다.');
     }
 
-    return {
-      access: this.authService.createAccessToken({ ...user }),
-      refresh: this.authService.createRefreshToken({ ...user }),
-    };
+    return this.authService.login(user.id);
   }
 
   async findById(id: number): Promise<UserEntity | null> {
     return await this.userRepository.findById(id);
+  }
+
+  async findByKey(key: string): Promise<UserEntity | null> {
+    return await this.userRepository.findByKey(key);
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
@@ -57,8 +55,4 @@ export class UserService {
   async update(email: string, updateUserDto: UpdateUserDto) {
     return await this.userRepository.update(email, updateUserDto);
   }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }
