@@ -55,7 +55,8 @@ export class UserRepository implements IUserRepository {
   }
 
   public async findAll(): Promise<UserEntity[]> {
-    return this.prismaService.user.findMany();
+    const userList = await this.prismaService.user.findMany();
+    return userList.map((user) => new UserEntity(user));
   }
 
   public async update(email: string, updateUserDao: UpdateUserDao) {

@@ -5,6 +5,7 @@
 # environment
 .env
 .env.dev
+.**.env
 
 # database
 /mysql

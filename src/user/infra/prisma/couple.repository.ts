@@ -20,4 +20,17 @@ export class CoupleRepository implements ICoupleRepository {
 
     return new CoupleEntity({ ...couple });
   }
+
+  public async findByUserId(id: number) {
+    const couple = await this.prismaService.couple.findFirst({
+      where: {
+        OR: [
+          { User_Couple_boyToUser: { id } },
+          { User_Couple_girlToUser: { id } },
+        ],
+      },
+    });
+
+    return new CoupleEntity({ ...couple });
+  }
 }

@@ -12,4 +12,8 @@ export class CoupleService {
   async create(createCoupleDao: CreateCoupleDao) {
     this.coupleRepository.create(createCoupleDao);
   }
+
+  async findByUserId(id: number) {
+    return await this.coupleRepository.findByUserId(id);
+  }
 }

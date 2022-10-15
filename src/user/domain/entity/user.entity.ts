@@ -33,6 +33,10 @@ export default class UserEntity {
   birthday: Date;
   createdAt?: Date;
   deletedAt?: Date;
+
+  get isMale(): boolean {
+    return this.gender === 'M';
+  }
 }
 
 export type Gender = 'M' | 'F';

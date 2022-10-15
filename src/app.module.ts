@@ -11,7 +11,12 @@ import { AuthGuard } from './auth/auth.guard';
     UserModule,
     AuthModule,
     PrismaModule,
-    ConfigModule.forRoot({ envFilePath: '.env' }),
+    ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? '.production.env'
+          : '.development.env',
+    }),
   ],
   controllers: [],
   providers: [PrismaService, AuthGuard],
