@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { CreateUserDao, UpdateUserDao } from '../../domain/dao/user.dao';
+import {
+  CreateUserDao,
+  UpdateUserDao,
+} from '../../domain/repository/dao/user.dao';
 import UserEntity from '../../domain/entity/user.entity';
 import IUserRepository from '../../domain/repository/user.repository';
 
@@ -34,6 +37,16 @@ export class UserRepository implements IUserRepository {
   public async findByEmail(email: string): Promise<UserEntity | null> {
     const user = await this.prismaService.user.findFirst({
       where: { email },
+    });
+
+    if (user === null) return null;
+
+    return new UserEntity(user);
+  }
+
+  public async findByCode(code: string): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findFirst({
+      where: { code },
     });
 
     if (user === null) return null;

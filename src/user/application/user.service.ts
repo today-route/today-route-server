@@ -1,10 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import AuthService from 'src/auth/auth.service';
-import TokenDto from '../domain/dto/token.dto';
-import { CreateUserDto, UpdateUserDto } from '../domain/dto/user.dto';
-import UserEntity from '../domain/entity/user.entity';
-import IUserRepository from '../domain/repository/user.repository';
-import ICodeService from './code.service';
+import TokenDto from 'src/user/application/dto/token.dto';
+
+import UserEntity from 'src/user/domain/entity/user.entity';
+import IUserRepository from 'src/user/domain/repository/user.repository';
+import ICodeService from 'src/user/application/code.service';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+} from 'src/user/application/dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -46,6 +50,10 @@ export class UserService {
 
   async findByEmail(email: string): Promise<UserEntity | null> {
     return await this.userRepository.findByEmail(email);
+  }
+
+  async findByCode(code: string): Promise<UserEntity | null> {
+    return await this.userRepository.findByCode(code);
   }
 
   async findAll(): Promise<UserEntity[]> {

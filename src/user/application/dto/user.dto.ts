@@ -6,8 +6,8 @@ import {
   IsUrl,
 } from 'class-validator';
 import { DTO_VALIDATION_ERROR_MESSAGE } from 'src/constants/errorMessage';
+import { Gender } from 'src/user/domain/entity/user.entity';
 import { IsGender } from 'src/utils/isGender';
-import { Gender } from '../entity/user.entity';
 
 export class CreateUserDto {
   @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })

@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["darwin-arm64", " linux-arm-openssl-1.1.x"]
+  // binaryTargets = ["darwin-arm64", "linux-arm-openssl-1.1.x"]
+  binaryTargets = ["darwin-arm64"]
 }
 
 datasource db {
@@ -9,24 +10,74 @@ datasource db {
 }
 
 model User {
-  id         Int         @id @default(autoincrement())
-  key        String      @unique(map: "User_UN") @db.VarChar(100)
-  code       String      @db.VarChar(30)
-  email      String      @unique(map: "user_UN_1") @db.VarChar(30)
-  gender     User_gender
-  nickname   String      @unique(map: "user_UN_2") @db.VarChar(30)
-  profileUrl String      @db.VarChar(100)
-  birthday   DateTime    @db.Date
-  createdAt  DateTime    @default(now()) @db.DateTime(0)
-  deletedAt  DateTime?   @db.DateTime(0)
+  id                       Int         @id @default(autoincrement())
+  key                      String      @unique(map: "User_UN") @db.VarChar(100)
+  code                     String      @db.VarChar(30)
+  email                    String      @unique(map: "user_UN_1") @db.VarChar(30)
+  gender                   User_gender
+  nickname                 String      @unique(map: "user_UN_2") @db.VarChar(30)
+  profileUrl               String      @db.VarChar(100)
+  birthday                 DateTime    @db.Date
+  createdAt                DateTime    @default(now()) @db.DateTime(0)
+  deletedAt                DateTime?   @db.DateTime(0)
+  Couple_Couple_boyToUser  Couple[]    @relation("Couple_boyToUser")
+  Couple_Couple_girlToUser Couple[]    @relation("Couple_girlToUser")
+  Route                    Route[]
 }
 
 model Couple {
-  id        Int       @id
-  startDate DateTime? @db.Date
-  isEnd     Boolean?
-  boy       Int?
-  girl      Int?
+  id                     Int       @id @default(autoincrement())
+  startDate              DateTime? @db.Date
+  isEnd                  Boolean?
+  boy                    Int?
+  girl                   Int?
+  User_Couple_boyToUser  User?     @relation("Couple_boyToUser", fields: [boy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK")
+  User_Couple_girlToUser User?     @relation("Couple_girlToUser", fields: [girl], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK_1")
+
+  @@index([boy], map: "Couple_FK")
+  @@index([girl], map: "Couple_FK_1")
+}
+
+model GeoCoord {
+  id        Int   @id @default(autoincrement())
+  routeId   Int
+  longitude Float @db.Float
+  latitude  Float @db.Float
+  Route     Route @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "geocoord_ibfk_1")
+
+  @@index([routeId], map: "routeId")
+}
+
+model Place {
+  id           Int          @id @default(autoincrement())
+  fullLocation String       @db.VarChar(100)
+  name         String       @db.VarChar(50)
+  PlacePhoto   PlacePhoto[]
+}
+
+model PlacePhoto {
+  id      Int    @id @default(autoincrement())
+  url     String @db.VarChar(100)
+  placeId Int
+  Place   Place  @relation(fields: [placeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "placephoto_ibfk_1")
+
+  @@index([placeId], map: "placeId")
+}
+
+model Route {
+  id         Int        @id @default(autoincrement())
+  distance   String     @db.VarChar(50)
+  movingTime Int
+  userId     Int
+  date       DateTime   @db.Date
+  zoomLevel  Int
+  title      String?    @db.VarChar(50)
+  content    String?    @db.VarChar(50)
+  location   String?    @db.VarChar(50)
+  User       User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "route_ibfk_1")
+  GeoCoord   GeoCoord[]
+
+  @@index([userId], map: "userId")
 }
 
 enum User_gender {

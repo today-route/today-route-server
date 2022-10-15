@@ -1,14 +1,14 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import TokenDto from 'src/user/domain/dto/token.dto';
+import TokenDto from 'src/user/application/dto/token.dto';
 
 @Injectable()
 export default class AuthService {
-  private createAccessToken(user: { id: number }) {
+  private createAccessToken(user: { id: number; coupleId?: number }) {
     return jwt.sign(user, 'test', { expiresIn: '3d' });
   }
 
-  private createRefreshToken(user: { id: number }) {
+  private createRefreshToken(user: { id: number; coupleId?: number }) {
     return jwt.sign(user, 'test', { expiresIn: '7d' });
   }
 

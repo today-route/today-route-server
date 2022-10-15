@@ -1,4 +1,4 @@
-import { Gender } from '../entity/user.entity';
+import { Gender } from '../../entity/user.entity';
 
 export type CreateUserDao = {
   email: string;
