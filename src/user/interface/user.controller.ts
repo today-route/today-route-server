@@ -17,7 +17,7 @@ import {
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/register')
+  @Post('/signup')
   async create(@Body() createUserDto: CreateUserDto) {
     const token = await this.userService.create(createUserDto);
     const user = await this.userService.findByKey(createUserDto.key);
@@ -25,9 +25,9 @@ export class UserController {
     return { ...token, user };
   }
 
-  @Post('/login')
+  @Post('/signin')
   async login(@Body() authDto: { key: string }) {
-    const token = await this.userService.login(authDto.key);
+    const token = await this.userService.signin(authDto.key);
     const user = await this.userService.findByKey(authDto.key);
 
     return { ...token, user };

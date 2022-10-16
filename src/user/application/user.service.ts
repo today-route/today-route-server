@@ -27,21 +27,21 @@ export class UserService {
       code,
     });
 
-    return this.authService.login(user.id);
+    return this.authService.signin(user.id);
   }
 
-  async login(key: string): Promise<TokenDto> {
+  async signin(key: string): Promise<TokenDto> {
     const user = await this.userRepository.findByKey(key);
 
     if (user === null) {
       throw new NotFoundException('존재하지 않는 회원입니다.');
     }
 
-    return this.authService.login(user.id);
+    return this.authService.signin(user.id);
   }
 
   async refresh(refresh: string): Promise<TokenDto> {
-    return this.authService.login(this.authService.verify(refresh).id);
+    return this.authService.signin(this.authService.verify(refresh).id);
   }
 
   async findById(id: number): Promise<UserEntity | null> {

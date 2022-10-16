@@ -20,7 +20,7 @@ export default class AuthService {
     }
   }
 
-  login(id: number): TokenDto {
+  signin(id: number): TokenDto {
     return {
       access: this.createAccessToken({ id }),
       refresh: this.createRefreshToken({ id }),
