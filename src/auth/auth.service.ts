@@ -9,7 +9,7 @@ export default class AuthService {
   }
 
   private createRefreshToken(user: { id: number; coupleId?: number }) {
-    return jwt.sign(user, 'test', { expiresIn: '7d' });
+    return jwt.sign(user, 'test', { expiresIn: '30d' });
   }
 
   verify(jwtToken: string): string | jwt.JwtPayload {

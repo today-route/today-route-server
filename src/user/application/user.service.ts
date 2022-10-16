@@ -40,6 +40,10 @@ export class UserService {
     return this.authService.login(user.id);
   }
 
+  async refresh(refresh: string): Promise<TokenDto> {
+    return this.authService.login(this.authService.verify(refresh).id);
+  }
+
   async findById(id: number): Promise<UserEntity | null> {
     return await this.userRepository.findById(id);
   }

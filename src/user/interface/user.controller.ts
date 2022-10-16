@@ -23,8 +23,12 @@ export class UserController {
   }
 
   @Post('/login')
-  login(@Body() authDto: { key: string }) {
-    return this.userService.login(authDto.key);
+  async login(@Body() authDto: { key: string }) {
+  }
+
+  @Post('/refresh')
+  refresh(@Body() refreshDto: { refresh: string }) {
+    return this.userService.refresh(refreshDto.refresh);
   }
 
   @Get('/')
