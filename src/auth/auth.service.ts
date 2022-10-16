@@ -12,9 +12,9 @@ export default class AuthService {
     return jwt.sign(user, 'test', { expiresIn: '30d' });
   }
 
-  verify(jwtToken: string): string | jwt.JwtPayload {
+  verify(jwtToken: string): jwt.JwtPayload {
     try {
-      return jwt.verify(jwtToken, 'test');
+      return jwt.verify(jwtToken, 'test') as jwt.JwtPayload;
     } catch (e) {
       throw new UnauthorizedException();
     }

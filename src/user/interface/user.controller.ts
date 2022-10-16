@@ -18,12 +18,19 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/register')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const token = await this.userService.create(createUserDto);
+    const user = await this.userService.findByKey(createUserDto.key);
+
+    return { ...token, user };
   }
 
   @Post('/login')
   async login(@Body() authDto: { key: string }) {
+    const token = await this.userService.login(authDto.key);
+    const user = await this.userService.findByKey(authDto.key);
+
+    return { ...token, user };
   }
 
   @Post('/refresh')

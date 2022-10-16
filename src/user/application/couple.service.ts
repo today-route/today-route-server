@@ -9,8 +9,8 @@ export class CoupleService {
     private readonly coupleRepository: ICoupleRepository,
   ) {}
 
-  async create(createCoupleDao: CreateCoupleDao) {
-    this.coupleRepository.create(createCoupleDao);
+  create(createCoupleDao: CreateCoupleDao) {
+    return this.coupleRepository.create(createCoupleDao);
   }
 
   async findByUserId(id: number) {
