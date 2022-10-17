@@ -28,8 +28,11 @@ export class CoupleRepository implements ICoupleRepository {
           { User_Couple_boyToUser: { id } },
           { User_Couple_girlToUser: { id } },
         ],
+        AND: [{ isEnd: false }],
       },
     });
+
+    if (couple === null) return null;
 
     return new CoupleEntity({ ...couple });
   }

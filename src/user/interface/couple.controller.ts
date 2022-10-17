@@ -17,7 +17,6 @@ export class CoupleController {
     return this.coupleService.findByUserId(user.id);
   }
 
-  @UseGuards(AuthGuard)
   @Post()
   async createCouple(
     @User() user,
