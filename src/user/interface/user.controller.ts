@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from 'src/user/application/user.service';
 import {
   CreateUserDto,
   UpdateUserDto,
 } from 'src/user/application/dto/user.dto';
+import { User } from 'src/utils/user.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -38,9 +41,10 @@ export class UserController {
     return this.userService.refresh(refreshDto.refresh);
   }
 
-  @Get('/')
-  findAll() {
-    return this.userService.findAll();
+  @UseGuards(AuthGuard)
+  @Get()
+  findAll(@User() { id }) {
+    return this.userService.findById(id);
   }
 
   @Get(':email')
