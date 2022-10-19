@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import AuthService from 'src/auth/auth.service';
 import TokenDto from 'src/user/application/dto/token.dto';
 
@@ -34,7 +34,7 @@ export class UserService {
     const user = await this.userRepository.findByKey(key);
 
     if (user === null) {
-      throw new NotFoundException('존재하지 않는 회원입니다.');
+      throw new UnauthorizedException('존재하지 않는 회원입니다.');
     }
 
     return this.authService.signin(user.id);

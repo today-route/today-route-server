@@ -13,28 +13,28 @@ export class CreateUserDto {
   @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
   readonly key: string;
 
-  @IsEmail({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsEmail({}, { message: '이메일을 올바르게 입력해주세요.' })
   readonly email: string;
 
-  @IsGender({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsGender({ message: '성별을 올바르게 입력해주세요.' })
   readonly gender: Gender;
 
-  @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsString({ message: '닉네임을 올바르게 입력해주세요.' })
   readonly nickname: string;
 
-  @IsUrl({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsUrl({}, { message: '프로필 이미지 경로를 올바르게 입력해주세요.' })
   readonly profileUrl: string;
 
-  @IsDateString({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsDateString({}, { message: '생년월일을 올바르게 입력해주세요.' })
   readonly birthday: string;
 }
 
 export class UpdateUserDto {
   @IsOptional()
-  @IsString({ message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsString({ message: '닉네임을 올바르게 입력해주세요.' })
   readonly nickname?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: DTO_VALIDATION_ERROR_MESSAGE })
+  @IsUrl({}, { message: '프로필 이미지 경로를 올바르게 입력해주세요.' })
   readonly profileUrl?: string;
 }

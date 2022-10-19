@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  NotFoundException,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from 'src/user/application/user.service';
@@ -43,16 +42,13 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@User() { id }) {
+  my(@User() { id }) {
     return this.userService.findById(id);
   }
 
   @Get(':email')
-  async findByEmail(@Param('email') email: string) {
-    const user = await this.userService.findByEmail(email);
-
-    if (user === null) throw new NotFoundException();
-    return user;
+  findByEmail(@Param('email') email: string) {
+    return this.userService.findByEmail(email);
   }
 
   @Patch(':email')
