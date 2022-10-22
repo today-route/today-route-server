@@ -8,32 +8,32 @@ datasource db {
 }
 
 model User {
-  id                       Int         @id @default(autoincrement())
-  key                      String      @unique(map: "User_UN") @db.VarChar(100)
-  code                     String      @db.VarChar(30)
-  email                    String      @unique(map: "user_UN_1") @db.VarChar(30)
-  gender                   User_gender
-  nickname                 String      @unique(map: "user_UN_2") @db.VarChar(30)
-  profileUrl               String      @db.VarChar(100)
-  birthday                 DateTime    @db.Date
-  createdAt                DateTime    @default(now()) @db.DateTime(0)
-  deletedAt                DateTime?   @db.DateTime(0)
-  Couple_Couple_boyToUser  Couple[]    @relation("Couple_boyToUser")
-  Couple_Couple_girlToUser Couple[]    @relation("Couple_girlToUser")
-  Route                    Route[]
+  id                         Int         @id @default(autoincrement())
+  key                        String      @unique(map: "User_UN") @db.VarChar(100)
+  code                       String      @db.VarChar(30)
+  email                      String      @unique(map: "user_UN_1") @db.VarChar(30)
+  gender                     User_gender
+  nickname                   String      @unique(map: "user_UN_2") @db.VarChar(30)
+  profileUrl                 String      @db.VarChar(100)
+  birthday                   DateTime    @db.Date
+  createdAt                  DateTime    @default(now()) @db.DateTime(0)
+  deletedAt                  DateTime?   @db.DateTime(0)
+  Couple_Couple_boyIdToUser  Couple[]    @relation("Couple_boyIdToUser")
+  Couple_Couple_girlIdToUser Couple[]    @relation("Couple_girlIdToUser")
+  Route                      Route[]
 }
 
 model Couple {
-  id                     Int       @id @default(autoincrement())
-  startDate              DateTime? @db.Date
-  isEnd                  Boolean?
-  boy                    Int?
-  girl                   Int?
-  User_Couple_boyToUser  User?     @relation("Couple_boyToUser", fields: [boy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK")
-  User_Couple_girlToUser User?     @relation("Couple_girlToUser", fields: [girl], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK_1")
+  id        Int      @id @default(autoincrement())
+  startDate DateTime @db.Date
+  isEnd     Boolean
+  boyId     Int
+  girlId    Int
+  boy       User     @relation("Couple_boyIdToUser", fields: [boyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK")
+  girl      User     @relation("Couple_girlIdToUser", fields: [girlId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK_1")
 
-  @@index([boy], map: "Couple_FK")
-  @@index([girl], map: "Couple_FK_1")
+  @@index([boyId], map: "Couple_FK")
+  @@index([girlId], map: "Couple_FK_1")
 }
 
 model GeoCoord {

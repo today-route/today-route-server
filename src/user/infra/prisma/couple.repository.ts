@@ -3,18 +3,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import CoupleEntity from 'src/user/domain/entity/couple.entity';
 import { CreateCoupleDao } from 'src/user/domain/repository/dao/couple.dao';
 import ICoupleRepository from 'src/user/domain/repository/couple.repository';
+import UserEntity from 'src/user/domain/entity/user.entity';
 
 @Injectable()
 export class CoupleRepository implements ICoupleRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  public async create(createCoupleDao: CreateCoupleDao) {
+  public async create(createCoupleDao: CreateCoupleDao): Promise<CoupleEntity> {
     const couple = await this.prismaService.couple.create({
       data: {
         startDate: new Date(createCoupleDao.startDate),
         isEnd: false,
-        User_Couple_boyToUser: { connect: { id: createCoupleDao.boyId } },
-        User_Couple_girlToUser: { connect: { id: createCoupleDao.girlId } },
+        boy: { connect: { id: createCoupleDao.boyId } },
+        girl: { connect: { id: createCoupleDao.girlId } },
       },
     });
 
@@ -24,16 +25,21 @@ export class CoupleRepository implements ICoupleRepository {
   public async findByUserId(id: number) {
     const couple = await this.prismaService.couple.findFirst({
       where: {
-        OR: [
-          { User_Couple_boyToUser: { id } },
-          { User_Couple_girlToUser: { id } },
-        ],
+        OR: [{ boyId: id }, { girlId: id }],
         AND: [{ isEnd: false }],
+      },
+      include: {
+        boy: true,
+        girl: true,
       },
     });
 
     if (couple === null) return null;
 
-    return new CoupleEntity({ ...couple });
+    return new CoupleEntity({
+      ...couple,
+      boy: new UserEntity(couple.boy),
+      girl: new UserEntity(couple.girl),
+    });
   }
 }
