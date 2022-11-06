@@ -8,19 +8,18 @@ datasource db {
 }
 
 model User {
-  id                         Int         @id @default(autoincrement())
-  key                        String      @unique(map: "User_UN") @db.VarChar(100)
-  code                       String      @db.VarChar(30)
-  email                      String      @unique(map: "user_UN_1") @db.VarChar(30)
-  gender                     User_gender
-  nickname                   String      @unique(map: "user_UN_2") @db.VarChar(30)
-  profileUrl                 String      @db.VarChar(100)
-  birthday                   DateTime    @db.Date
-  createdAt                  DateTime    @default(now()) @db.DateTime(0)
-  deletedAt                  DateTime?   @db.DateTime(0)
-  Couple_Couple_boyIdToUser  Couple[]    @relation("Couple_boyIdToUser")
-  Couple_Couple_girlIdToUser Couple[]    @relation("Couple_girlIdToUser")
-  Route                      Route[]
+  id         Int         @id @default(autoincrement())
+  key        String      @unique(map: "User_UN") @db.VarChar(100)
+  code       String      @db.VarChar(30)
+  email      String      @unique(map: "user_UN_1") @db.VarChar(30)
+  gender     User_gender
+  nickname   String      @unique(map: "user_UN_2") @db.VarChar(30)
+  profileUrl String      @db.VarChar(100)
+  birthday   DateTime    @db.Date
+  createdAt  DateTime    @default(now()) @db.DateTime(0)
+  deletedAt  DateTime?   @db.DateTime(0)
+  boyCouple  Couple[]    @relation("Couple_boyIdToUser")
+  girlCouple Couple[]    @relation("Couple_girlIdToUser")
 }
 
 model Couple {
@@ -31,6 +30,7 @@ model Couple {
   girlId    Int
   boy       User     @relation("Couple_boyIdToUser", fields: [boyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK")
   girl      User     @relation("Couple_girlIdToUser", fields: [girlId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK_1")
+  Route     Route[]
 
   @@index([boyId], map: "Couple_FK")
   @@index([girlId], map: "Couple_FK_1")
@@ -41,7 +41,7 @@ model GeoCoord {
   routeId   Int
   longitude Float @db.Float
   latitude  Float @db.Float
-  Route     Route @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "geocoord_ibfk_1")
+  route     Route @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "geocoord_ibfk_1")
 
   @@index([routeId], map: "routeId")
 }
@@ -50,32 +50,40 @@ model Place {
   id           Int          @id @default(autoincrement())
   fullLocation String       @db.VarChar(100)
   name         String       @db.VarChar(50)
-  PlacePhoto   PlacePhoto[]
+  placePhoto   PlacePhoto[]
 }
 
 model PlacePhoto {
   id      Int    @id @default(autoincrement())
   url     String @db.VarChar(100)
   placeId Int
-  Place   Place  @relation(fields: [placeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "placephoto_ibfk_1")
+  place   Place  @relation(fields: [placeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "placephoto_ibfk_1")
 
   @@index([placeId], map: "placeId")
 }
 
 model Route {
-  id         Int        @id @default(autoincrement())
-  distance   String     @db.VarChar(50)
-  movingTime Int
-  userId     Int
-  date       DateTime   @db.Date
-  zoomLevel  Int
-  title      String?    @db.VarChar(50)
-  content    String?    @db.VarChar(50)
-  location   String?    @db.VarChar(50)
-  User       User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "route_ibfk_1")
-  GeoCoord   GeoCoord[]
+  id         Int          @id @default(autoincrement())
+  coupleId   Int
+  date       DateTime     @db.Date
+  zoomLevel  Float        @db.Float
+  title      String       @db.VarChar(50)
+  content    String       @db.VarChar(50)
+  location   String?      @db.VarChar(50)
+  Couple     Couple       @relation(fields: [coupleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Route_FK")
+  geoCoord   GeoCoord[]
+  routePhoto RoutePhoto[]
 
-  @@index([userId], map: "userId")
+  @@index([coupleId], map: "Route_FK")
+}
+
+model RoutePhoto {
+  id      Int    @id @default(autoincrement())
+  url     String @db.VarChar(500)
+  routeId Int
+  route   Route  @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "RoutePhoto_FK")
+
+  @@index([routeId], map: "RoutePhoto_FK")
 }
 
 enum User_gender {

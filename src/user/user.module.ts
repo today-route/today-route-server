@@ -15,9 +15,9 @@ import { UserController } from 'src/user/interface/user.controller';
     { provide: 'USER_REPOSITORY', useClass: UserRepository },
     { provide: 'COUPLE_REPOSITORY', useClass: CoupleRepository },
     UserService,
-    { provide: 'CODE_SERVICE', useClass: CodeService },
     CoupleService,
+    { provide: 'CODE_SERVICE', useClass: CodeService },
   ],
-  exports: [UserService],
+  exports: [UserService, CoupleService],
 })
 export class UserModule {}
