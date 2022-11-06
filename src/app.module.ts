@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AuthGuard } from './auth/auth.guard';
 import { AwsModule } from './aws/aws.module';
+import { RouteModule } from './route/route.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AwsModule } from './aws/aws.module';
           : '.development.env',
     }),
     AwsModule,
+    RouteModule,
   ],
   controllers: [],
   providers: [PrismaService, AuthGuard],
