@@ -1,10 +1,10 @@
 import {
-  IsArray,
   IsDateString,
   IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { IsGeoCoordArray } from 'src/utils/geoCoord.validator';
 
 export class CreateRouteRequest {
   @IsDateString({}, { message: '날짜' })
@@ -23,6 +23,6 @@ export class CreateRouteRequest {
   @IsString({ message: '지역' })
   location?: string;
 
-  @IsArray()
+  @IsGeoCoordArray({ message: '좌표' })
   geoCoord: string[][];
 }
