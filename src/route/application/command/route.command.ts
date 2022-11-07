@@ -28,7 +28,7 @@ export class CreateRouteCommand {
     this.zoomLevel = parseFloat(data.zoomLevel);
     this.location = data.location;
     this.geoCoord = data.geoCoord.map(
-      (e) => new CreateGeoCoordCommand({ longitude: e[0], latitude: e[1] }),
+      (e) => new CreateGeoCoordCommand({ latitude: e[0], longitude: e[1] }),
     );
     this.routePhoto = data.routePhoto.map(
       (e) => new CreateRoutePhotoCommand({ url: e }),

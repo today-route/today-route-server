@@ -66,7 +66,7 @@ export class RouteController {
     const x = await this.routeService.getMonthly(
       new GetRouteListCommand({ ...date, coupleId: couple.id }),
     );
-    console.dir(x);
+
     return x.map((e) => new RouteDto(e));
   }
 

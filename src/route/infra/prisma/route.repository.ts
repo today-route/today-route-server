@@ -48,8 +48,6 @@ export class RouteRepository implements IRouteRepository {
       },
     });
 
-    console.dir(routeList);
-
     return routeList.map(
       (route) =>
         new RouteEntity({
