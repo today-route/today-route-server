@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateRouteCommand } from 'src/route/application/command/route.command';
-import GeoCoordEntity from 'src/route/domain/entity/geoCoord.entity';
+import {
+  CreateRouteCommand,
+  GetRouteListCommand,
+} from 'src/route/application/command/route.command';
+
 import RouteEntity from 'src/route/domain/entity/route.entity';
-import RoutePhotoEntity from 'src/route/domain/entity/routePhoto.entity';
 import IRouteRepository from 'src/route/domain/repository/route.repository';
 
 @Injectable()
@@ -21,17 +23,29 @@ export class RouteRepository implements IRouteRepository {
       },
     });
 
-    const route = await this.prismaService.$transaction([createRouteOperation]);
-    console.log('create route result');
-    console.dir(route);
-
-    // return new RouteEntity(route);
+    await this.prismaService.$transaction([createRouteOperation]);
   }
 
-  public async findByCoupleId(coupleId: number) {
+  public async findByCoupleId(arg: GetRouteListCommand) {
+    const start = new Date(`${arg.year}-${arg.month}-01`);
+    const end = new Date(
+      new Date(`${arg.year}-${arg.month}-01`).setMonth(
+        new Date(`${arg.year}-${arg.month}-01`).getMonth() + 1,
+      ),
+    );
+
     const routeList = await this.prismaService.route.findMany({
-      where: { coupleId },
-      include: { geoCoord: true, routePhoto: true },
+      where: {
+        AND: [
+          { coupleId: arg.coupleId },
+          {
+            date: {
+              gte: start,
+              lt: end,
+            },
+          },
+        ],
+      },
     });
 
     console.dir(routeList);
@@ -40,13 +54,16 @@ export class RouteRepository implements IRouteRepository {
       (route) =>
         new RouteEntity({
           ...route,
-          geoCoord: route.geoCoord.map(
-            (geoCoord) => new GeoCoordEntity(geoCoord),
-          ),
-          routePhoto: route.routePhoto.map(
-            (routePhoto) => new RoutePhotoEntity(routePhoto),
-          ),
         }),
     );
+  }
+
+  public async findMyRouteById(id: number) {
+    const result = await this.prismaService.route.findUnique({
+      where: { id },
+      include: { geoCoord: true, routePhoto: true, couple: true },
+    });
+
+    return new RouteEntity({ ...result });
   }
 }

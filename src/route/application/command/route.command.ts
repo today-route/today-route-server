@@ -35,3 +35,15 @@ export class CreateRouteCommand {
     );
   }
 }
+
+export class GetRouteListCommand {
+  coupleId: number;
+  year: number;
+  month: number;
+
+  constructor(data: { coupleId: number; year: string; month: string }) {
+    this.coupleId = data.coupleId;
+    this.year = +data.year;
+    this.month = +data.month;
+  }
+}

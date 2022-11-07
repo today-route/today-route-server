@@ -70,7 +70,7 @@ model Route {
   title      String       @db.VarChar(50)
   content    String       @db.VarChar(50)
   location   String?      @db.VarChar(50)
-  Couple     Couple       @relation(fields: [coupleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Route_FK")
+  couple     Couple       @relation(fields: [coupleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Route_FK")
   geoCoord   GeoCoord[]
   routePhoto RoutePhoto[]
 

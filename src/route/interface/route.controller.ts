@@ -2,7 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
+  Get,
+  Param,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -14,9 +18,13 @@ import { CoupleService } from 'src/user/application/couple.service';
 import { User } from 'src/utils/user.decorator';
 import { RouteService } from 'src/route/application/route.service';
 import { CreateRouteRequest } from 'src/route/interface/route.request';
-import { CreateRouteCommand } from '../application/command/route.command';
+import {
+  CreateRouteCommand,
+  GetRouteListCommand,
+} from '../application/command/route.command';
+import RouteDto from '../domain/dto/route.dto';
 
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @Controller('route')
 export class RouteController {
   constructor(
@@ -25,7 +33,6 @@ export class RouteController {
     private readonly routeService: RouteService,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(FilesInterceptor('photos'))
   async createRoute(
@@ -47,5 +54,35 @@ export class RouteController {
         routePhoto: photoUrlList,
       }),
     );
+  }
+
+  @Get()
+  async getRouteWithMonth(
+    @User() userInfo: { id: number; coupleId?: number },
+    @Query() date: { year: string; month: string },
+  ) {
+    const couple = await this.coupleService.findByUserId(userInfo.id);
+
+    const x = await this.routeService.getMonthly(
+      new GetRouteListCommand({ ...date, coupleId: couple.id }),
+    );
+    console.dir(x);
+    return x.map((e) => new RouteDto(e));
+  }
+
+  @Get(':id')
+  async getRouteDetail(
+    @User() userInfo: { id: number; coupleId?: number },
+    @Param('id') id: number,
+  ) {
+    const couple = await this.coupleService.findByUserId(userInfo.id);
+
+    const route = await this.routeService.getDetail(id);
+
+    if (route.couple.id === couple.id) {
+      return new RouteDto(route);
+    }
+
+    throw new ForbiddenException('본인의 루트가 아닙니다');
   }
 }

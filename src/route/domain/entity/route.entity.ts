@@ -1,6 +1,6 @@
-import UserEntity from 'src/user/domain/entity/user.entity';
 import RoutePhotoEntity from 'src/route/domain/entity/routePhoto.entity';
 import GeoCoordEntity from './geoCoord.entity';
+import CoupleEntity from 'src/user/domain/entity/couple.entity';
 
 export default class RouteEntity {
   constructor(route: {
@@ -10,18 +10,20 @@ export default class RouteEntity {
     title: string;
     content: string;
     location?: string;
-    user?: UserEntity;
+    couple?: CoupleEntity;
     routePhoto?: RoutePhotoEntity[];
-    geoCoord: GeoCoordEntity[];
+    geoCoord?: GeoCoordEntity[];
   }) {
     this.id = route.id;
     this.date = route.date;
     this.zoomLevel = route.zoomLevel;
+    this.title = route.title;
     this.content = route.content;
     this.location = route.location;
-    this.user = route.user;
+    this.couple = route.couple;
     this.routePhoto = route.routePhoto;
     this.geoCoord = route.geoCoord;
+    // this.geoCoord = route.geoCoord.map((e) => [e.latitude, e.longitude]);
   }
 
   id: number;
@@ -30,7 +32,8 @@ export default class RouteEntity {
   title: string;
   content: string;
   location?: string;
-  user?: UserEntity;
+  couple?: CoupleEntity;
   routePhoto?: RoutePhotoEntity[];
+  // geoCoord?: number[][];
   geoCoord?: GeoCoordEntity[];
 }
