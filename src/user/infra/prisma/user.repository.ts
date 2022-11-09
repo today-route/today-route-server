@@ -59,9 +59,9 @@ export class UserRepository implements IUserRepository {
     return userList.map((user) => new UserEntity(user));
   }
 
-  public async update(email: string, updateUserDao: UpdateUserDao) {
+  public async update(id: number, updateUserDao: UpdateUserDao) {
     const user = await this.prismaService.user.update({
-      where: { email },
+      where: { id },
       data: updateUserDao,
     });
 

@@ -8,5 +8,5 @@ export default interface IUserRepository {
   findByEmail(email: string): Promise<UserEntity | null>;
   findByCode(code: string): Promise<UserEntity | null>;
   findAll(): Promise<UserEntity[]>;
-  update(email: string, updateUserDao: UpdateUserDao): Promise<UserEntity>;
+  update(id: number, updateUserDao: UpdateUserDao): Promise<UserEntity>;
 }

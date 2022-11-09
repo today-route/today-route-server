@@ -14,7 +14,7 @@ model User {
   email      String      @unique(map: "user_UN_1") @db.VarChar(30)
   gender     User_gender
   nickname   String      @unique(map: "user_UN_2") @db.VarChar(30)
-  profileUrl String      @db.VarChar(100)
+  profileUrl String      @db.VarChar(2083)
   birthday   DateTime    @db.Date
   createdAt  DateTime    @default(now()) @db.DateTime(0)
   deletedAt  DateTime?   @db.DateTime(0)

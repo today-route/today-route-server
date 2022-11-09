@@ -6,18 +6,23 @@ import {
   Patch,
   Param,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from 'src/user/application/user.service';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-} from 'src/user/application/dto/user.dto';
+import { CreateUserDto } from 'src/user/application/dto/user.dto';
 import { User } from 'src/utils/user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
+import AwsService from 'src/aws/aws.service';
+import { UpdateUserRequest } from './user.request';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly awsService: AwsService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('/signup')
   async create(@Body() createUserDto: CreateUserDto) {
@@ -51,8 +56,22 @@ export class UserController {
     return this.userService.findByEmail(email);
   }
 
-  @Patch(':email')
-  update(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(email, updateUserDto);
+  @UseGuards(AuthGuard)
+  @Patch()
+  @UseInterceptors(FileInterceptor('profile'))
+  async update(
+    @User() user: { id: number },
+    @UploadedFile() profile: Express.Multer.File,
+    @Body() updateUserRequest: UpdateUserRequest,
+  ) {
+    if (profile) {
+      const profileUrl = await this.awsService.uploadOne(profile);
+
+      return this.userService.update(user.id, {
+        ...updateUserRequest,
+        profileUrl,
+      });
+    }
+    return this.userService.update(user.id, { ...updateUserRequest });
   }
 }

@@ -64,7 +64,7 @@ export class UserService {
     return await this.userRepository.findAll();
   }
 
-  async update(email: string, updateUserDto: UpdateUserDto) {
-    return await this.userRepository.update(email, updateUserDto);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.userRepository.update(id, updateUserDto);
   }
 }

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/auth/auth.module';
+import { AwsModule } from 'src/aws/aws.module';
 import { CoupleService } from 'src/user/application/couple.service';
 import { UserService } from 'src/user/application/user.service';
 import { CodeService } from 'src/user/infra/code.service';
@@ -9,7 +10,7 @@ import { CoupleController } from 'src/user/interface/couple.controller';
 import { UserController } from 'src/user/interface/user.controller';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, AwsModule],
   controllers: [UserController, CoupleController],
   providers: [
     { provide: 'USER_REPOSITORY', useClass: UserRepository },

@@ -41,7 +41,7 @@ export class RouteController {
     @Body() body: CreateRouteRequest,
   ) {
     const couple = await this.coupleService.findByUserId(userInfo.id);
-    const photoUrlList = await this.awsService.upload(photos);
+    const photoUrlList = await this.awsService.uploadMany(photos);
 
     if (photoUrlList.length !== photos.length) {
       throw new BadRequestException('사진 등록에 문제가 발생했습니다.');

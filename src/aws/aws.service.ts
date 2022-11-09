@@ -39,7 +39,11 @@ export default class AwsService {
       .promise();
   };
 
-  async upload(photos: Array<Express.Multer.File>): Promise<string[]> {
+  async uploadOne(file: Express.Multer.File): Promise<string> {
+    return (await this.uploadFileToS3(file)).Location;
+  }
+
+  async uploadMany(photos: Array<Express.Multer.File>): Promise<string[]> {
     const result: Array<S3.ManagedUpload.SendData> = [];
 
     for (const photo of photos) {
