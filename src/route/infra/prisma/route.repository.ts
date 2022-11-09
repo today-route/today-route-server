@@ -13,7 +13,7 @@ export class RouteRepository implements IRouteRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   public async create(data: CreateRouteCommand) {
-    const createRouteOperation = this.prismaService.route.create({
+    return this.prismaService.route.create({
       data: {
         ...data,
         geoCoord: {
@@ -22,8 +22,6 @@ export class RouteRepository implements IRouteRepository {
         routePhoto: { create: data.routePhoto },
       },
     });
-
-    await this.prismaService.$transaction([createRouteOperation]);
   }
 
   public async findByCoupleId(arg: GetRouteListCommand) {

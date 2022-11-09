@@ -47,13 +47,15 @@ export class RouteController {
       throw new BadRequestException('사진 등록에 문제가 발생했습니다.');
     }
 
-    this.routeService.create(
+    const route = await this.routeService.create(
       new CreateRouteCommand({
         ...body,
         coupleId: couple.id,
         routePhoto: photoUrlList,
       }),
     );
+
+    return { id: route.id };
   }
 
   @Get()

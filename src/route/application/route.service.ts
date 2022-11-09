@@ -13,7 +13,7 @@ export class RouteService {
   ) {}
 
   create(arg: CreateRouteCommand) {
-    this.routeRepository.create({
+    return this.routeRepository.create({
       ...arg,
     });
   }
