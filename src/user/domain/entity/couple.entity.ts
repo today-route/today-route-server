@@ -2,7 +2,7 @@ import UserEntity from './user.entity';
 
 export default class CoupleEntity {
   constructor(couple: {
-    id: number;
+    id?: number;
     startDate: Date;
     isEnd: boolean;
     boy?: UserEntity;
@@ -15,7 +15,7 @@ export default class CoupleEntity {
     this.girl = couple.girl;
   }
 
-  id: number;
+  id?: number;
   startDate: Date;
   isEnd: boolean;
   boy?: UserEntity;

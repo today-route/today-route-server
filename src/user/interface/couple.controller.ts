@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/utils/user.decorator';
 import { CoupleService } from '../application/couple.service';
 import { UserService } from '../application/user.service';
+import CoupleEntity from '../domain/entity/couple.entity';
+import { UpdateCoupleRequest } from './couple.request';
 
 @UseGuards(AuthGuard)
 @Controller('couple')
@@ -13,7 +15,7 @@ export class CoupleController {
   ) {}
 
   @Get()
-  getCoupleData(@User() user) {
+  getCouple(@User() user) {
     return this.coupleService.findByUserId(user.id);
   }
 
@@ -37,5 +39,15 @@ export class CoupleController {
         girlId: partner.id,
       });
     }
+  }
+
+  @Patch()
+  async updateCouple(
+    @User() user,
+    @Body() updateCoupleDto: UpdateCoupleRequest,
+  ) {
+    const couple: CoupleEntity = await this.coupleService.findByUserId(user.id);
+
+    return this.coupleService.update(couple.id, updateCoupleDto);
   }
 }

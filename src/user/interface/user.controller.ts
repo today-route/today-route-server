@@ -15,7 +15,7 @@ import { User } from 'src/utils/user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import AwsService from 'src/aws/aws.service';
 import { UpdateUserRequest } from './user.request';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
