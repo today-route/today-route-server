@@ -10,7 +10,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from 'src/user/application/user.service';
-import { CreateUserDto } from 'src/user/application/dto/user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+} from 'src/user/application/dto/user.dto';
 import { User } from 'src/utils/user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import AwsService from 'src/aws/aws.service';
@@ -64,14 +67,18 @@ export class UserController {
     @UploadedFile() profile: Express.Multer.File,
     @Body() updateUserRequest: UpdateUserRequest,
   ) {
+    console.dir(updateUserRequest);
     if (profile) {
       const profileUrl = await this.awsService.uploadOne(profile);
 
-      return this.userService.update(user.id, {
-        ...updateUserRequest,
-        profileUrl,
-      });
+      return this.userService.update(
+        user.id,
+        new UpdateUserDto({ ...updateUserRequest, profileUrl }),
+      );
     }
-    return this.userService.update(user.id, { ...updateUserRequest });
+    return this.userService.update(
+      user.id,
+      new UpdateUserDto(updateUserRequest),
+    );
   }
 }

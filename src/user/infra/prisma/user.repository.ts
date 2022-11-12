@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import {
-  CreateUserDao,
-  UpdateUserDao,
-} from '../../domain/repository/dao/user.dao';
+import { CreateUserDao } from '../../domain/repository/dao/user.dao';
 import UserEntity from '../../domain/entity/user.entity';
 import IUserRepository from '../../domain/repository/user.repository';
+import { UpdateUserDto } from 'src/user/application/dto/user.dto';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -59,10 +57,10 @@ export class UserRepository implements IUserRepository {
     return userList.map((user) => new UserEntity(user));
   }
 
-  public async update(id: number, updateUserDao: UpdateUserDao) {
+  public async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.prismaService.user.update({
       where: { id },
-      data: updateUserDao,
+      data: updateUserDto,
     });
 
     return new UserEntity(user);

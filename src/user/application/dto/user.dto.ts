@@ -1,10 +1,4 @@
-import {
-  IsDateString,
-  IsEmail,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsDateString, IsEmail, IsString, IsUrl } from 'class-validator';
 import { DTO_VALIDATION_ERROR_MESSAGE } from 'src/constants/errorMessage';
 import { Gender } from 'src/user/domain/entity/user.entity';
 import { IsGender } from 'src/utils/isGender';
@@ -30,11 +24,20 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
-  @IsOptional()
-  @IsString({ message: '닉네임을 올바르게 입력해주세요.' })
-  readonly nickname?: string;
+  constructor(data: {
+    birthday?: string;
+    nickname?: string;
+    profileUrl?: string;
+  }) {
+    if (data.birthday) {
+      this.birthday = new Date(data.birthday);
+    }
 
-  @IsOptional()
-  @IsUrl({}, { message: '프로필 이미지 경로를 올바르게 입력해주세요.' })
+    this.nickname = data.nickname;
+    this.profileUrl = data.profileUrl;
+  }
+
+  readonly birthday?: Date;
+  readonly nickname?: string;
   readonly profileUrl?: string;
 }

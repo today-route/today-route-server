@@ -9,8 +9,3 @@ export type CreateUserDao = {
   profileUrl: string;
   birthday: Date;
 };
-
-export type UpdateUserDao = {
-  nickname?: string;
-  profileUrl?: string;
-};
