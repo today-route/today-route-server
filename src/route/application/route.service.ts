@@ -3,6 +3,7 @@ import { RouteRepository } from '../infra/prisma/route.repository';
 import {
   CreateRouteCommand,
   GetRouteListCommand,
+  UpdateRouteCommand,
 } from './command/route.command';
 
 @Injectable()
@@ -13,9 +14,7 @@ export class RouteService {
   ) {}
 
   create(arg: CreateRouteCommand) {
-    return this.routeRepository.create({
-      ...arg,
-    });
+    return this.routeRepository.create(arg);
   }
 
   getMonthly(arg: GetRouteListCommand) {
@@ -24,5 +23,9 @@ export class RouteService {
 
   getDetail(id: number) {
     return this.routeRepository.findMyRouteById(id);
+  }
+
+  update(arg: UpdateRouteCommand) {
+    return this.routeRepository.update(arg);
   }
 }

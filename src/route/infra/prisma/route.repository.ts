@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateRouteCommand,
   GetRouteListCommand,
+  UpdateRouteCommand,
 } from 'src/route/application/command/route.command';
 
 import RouteEntity from 'src/route/domain/entity/route.entity';
@@ -61,5 +62,41 @@ export class RouteRepository implements IRouteRepository {
     });
 
     return new RouteEntity({ ...result });
+  }
+
+  public async update(arg: UpdateRouteCommand) {
+    if (arg.routePhoto.length === 0) {
+      return this.prismaService.route.update({
+        where: { id: arg.id },
+        data: {
+          zoomLevel: arg.zoomLevel,
+          title: arg.title,
+          content: arg.content,
+          location: arg.location,
+        },
+      });
+    }
+
+    return (
+      await this.prismaService.$transaction([
+        this.prismaService.routePhoto.deleteMany({
+          where: { routeId: arg.id },
+        }),
+        this.prismaService.route.update({
+          where: { id: arg.id },
+          data: {
+            zoomLevel: arg.zoomLevel,
+            title: arg.title,
+            content: arg.content,
+            location: arg.location,
+            routePhoto: {
+              create: arg.routePhoto.map((routePhoto) => ({
+                url: routePhoto.url,
+              })),
+            },
+          },
+        }),
+      ])
+    )[1];
   }
 }

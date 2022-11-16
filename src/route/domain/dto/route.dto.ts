@@ -21,4 +21,14 @@ export default class RouteDto {
   location?: string;
   routePhoto?: RoutePhotoDto[];
   geoCoord?: number[][];
+
+  public x() {
+    return {
+      date: this.date,
+      zoomLevel: this.zoomLevel,
+      title: this.title,
+      content: this.content,
+      location: this.location,
+    };
+  }
 }

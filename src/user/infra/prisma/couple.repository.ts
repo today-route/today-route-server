@@ -65,7 +65,6 @@ export class CoupleRepository implements ICoupleRepository {
   }
 
   public async update(id: number, updateCoupleDto: UpdateCoupleDto) {
-    console.dir(updateCoupleDto);
     const updatedData = await this.prismaService.couple.update({
       where: { id },
       data: {

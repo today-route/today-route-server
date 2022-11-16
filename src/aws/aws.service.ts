@@ -39,6 +39,13 @@ export default class AwsService {
       .promise();
   };
 
+  private deleteFileFromS3 = (keys: string[]) => {
+    return this.s3.deleteObjects({
+      Bucket: 'today-route-image',
+      Delete: { Objects: keys.map((key) => ({ Key: key })) },
+    }).promise;
+  };
+
   async uploadOne(file: Express.Multer.File): Promise<string> {
     return (await this.uploadFileToS3(file)).Location;
   }

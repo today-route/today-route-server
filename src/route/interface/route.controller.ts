@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UploadedFiles,
@@ -17,12 +18,17 @@ import AwsService from 'src/aws/aws.service';
 import { CoupleService } from 'src/user/application/couple.service';
 import { User } from 'src/utils/user.decorator';
 import { RouteService } from 'src/route/application/route.service';
-import { CreateRouteRequest } from 'src/route/interface/route.request';
+import {
+  CreateRouteRequest,
+  UpdateRouteRequest,
+} from 'src/route/interface/route.request';
 import {
   CreateRouteCommand,
   GetRouteListCommand,
+  UpdateRouteCommand,
 } from '../application/command/route.command';
 import RouteDto from '../domain/dto/route.dto';
+import CoupleEntity from 'src/user/domain/entity/couple.entity';
 
 @UseGuards(AuthGuard)
 @Controller('route')
@@ -56,6 +62,39 @@ export class RouteController {
     );
 
     return { id: route.id };
+  }
+
+  @Patch(':id')
+  @UseInterceptors(FilesInterceptor('photos'))
+  async updateRoute(
+    @User() userInfo: { id: number },
+    @UploadedFiles() photos: Array<Express.Multer.File>,
+    @Param('id') id: number,
+    @Body() body: UpdateRouteRequest,
+  ) {
+    const couple: CoupleEntity | null = await this.coupleService.findByUserId(
+      userInfo.id,
+    );
+
+    if (couple === null) {
+      throw new ForbiddenException();
+    }
+
+    if (photos.length === 0) {
+      return this.routeService.update(
+        new UpdateRouteCommand({ ...body, id: parseInt(body.id) }),
+      );
+    }
+
+    const photoUrlList = await this.awsService.uploadMany(photos);
+    console.dir(photoUrlList);
+    return this.routeService.update(
+      new UpdateRouteCommand({
+        ...body,
+        id: parseInt(body.id),
+        routePhoto: photoUrlList,
+      }),
+    );
   }
 
   @Get()

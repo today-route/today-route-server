@@ -47,3 +47,30 @@ export class GetRouteListCommand {
     this.month = +data.month;
   }
 }
+
+export class UpdateRouteCommand {
+  id: number;
+  title: string;
+  content: string;
+  zoomLevel: number;
+  location?: string;
+  routePhoto: CreateRoutePhotoCommand[];
+
+  constructor(data: {
+    id: number;
+    title: string;
+    content: string;
+    zoomLevel: string;
+    location?: string;
+    routePhoto?: string[];
+  }) {
+    this.id = data.id;
+    this.title = data.title;
+    this.content = data.content;
+    this.zoomLevel = parseFloat(data.zoomLevel);
+    this.location = data.location;
+    this.routePhoto =
+      data.routePhoto?.map((e) => new CreateRoutePhotoCommand({ url: e })) ??
+      [];
+  }
+}
