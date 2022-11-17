@@ -26,10 +26,10 @@ model Couple {
   id        Int      @id @default(autoincrement())
   startDate DateTime @db.Date
   isEnd     Boolean
-  boyId     Int
-  girlId    Int
-  boy       User     @relation("Couple_boyIdToUser", fields: [boyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK")
-  girl      User     @relation("Couple_girlIdToUser", fields: [girlId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Couple_FK_1")
+  boyId     Int?
+  girlId    Int?
+  boy       User?    @relation("Couple_boyIdToUser", fields: [boyId], references: [id], onUpdate: Restrict, map: "Couple_FK")
+  girl      User?    @relation("Couple_girlIdToUser", fields: [girlId], references: [id], onUpdate: Restrict, map: "Couple_FK_1")
   Route     Route[]
 
   @@index([boyId], map: "Couple_FK")
@@ -41,9 +41,9 @@ model GeoCoord {
   routeId   Int
   longitude Float @db.Float
   latitude  Float @db.Float
-  route     Route @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "geocoord_ibfk_1")
+  route     Route @relation(fields: [routeId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "geocoord_ibfk_1")
 
-  @@index([routeId], map: "routeId")
+  @@index([routeId], map: "geocoord_ibfk_1")
 }
 
 model Place {
@@ -81,7 +81,7 @@ model RoutePhoto {
   id      Int    @id @default(autoincrement())
   url     String @db.VarChar(500)
   routeId Int
-  route   Route  @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "RoutePhoto_FK")
+  route   Route  @relation(fields: [routeId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "RoutePhoto_FK")
 
   @@index([routeId], map: "RoutePhoto_FK")
 }
