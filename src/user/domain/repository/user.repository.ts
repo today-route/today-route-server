@@ -10,4 +10,5 @@ export default interface IUserRepository {
   findByCode(code: string): Promise<UserEntity | null>;
   findAll(): Promise<UserEntity[]>;
   update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity>;
+  delete(id: number): Promise<void>;
 }

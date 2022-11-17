@@ -8,6 +8,7 @@ import {
   UseGuards,
   UploadedFile,
   UseInterceptors,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from 'src/user/application/user.service';
 import {
@@ -67,7 +68,6 @@ export class UserController {
     @UploadedFile() profile: Express.Multer.File,
     @Body() updateUserRequest: UpdateUserRequest,
   ) {
-    console.dir(updateUserRequest);
     if (profile) {
       const profileUrl = await this.awsService.uploadOne(profile);
 
@@ -80,5 +80,11 @@ export class UserController {
       user.id,
       new UpdateUserDto(updateUserRequest),
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete()
+  async delete(@User() user: { id: number }) {
+    this.userService.delete(user.id);
   }
 }

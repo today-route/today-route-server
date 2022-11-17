@@ -65,4 +65,8 @@ export class UserRepository implements IUserRepository {
 
     return new UserEntity(user);
   }
+
+  public async delete(id: number) {
+    await this.prismaService.user.delete({ where: { id } });
+  }
 }
