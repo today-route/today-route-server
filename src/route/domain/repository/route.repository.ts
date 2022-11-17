@@ -9,4 +9,5 @@ export default interface IRouteRepository {
   create(createRouteDao: CreateRouteCommand): Promise<any>;
   findByCoupleId(arg: GetRouteListCommand): Promise<RouteEntity[]>;
   findMyRouteById(id: number): Promise<RouteEntity>;
+  delete(id: number): Promise<void>;
 }

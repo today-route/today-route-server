@@ -28,4 +28,8 @@ export class RouteService {
   update(arg: UpdateRouteCommand) {
     return this.routeRepository.update(arg);
   }
+
+  delete(id: number) {
+    return this.routeRepository.delete(id);
+  }
 }

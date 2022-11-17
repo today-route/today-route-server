@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -80,14 +81,8 @@ export class RouteController {
       throw new ForbiddenException();
     }
 
-    if (photos.length === 0) {
-      return this.routeService.update(
-        new UpdateRouteCommand({ ...body, id: parseInt(body.id) }),
-      );
-    }
-
     const photoUrlList = await this.awsService.uploadMany(photos);
-    console.dir(photoUrlList);
+
     return this.routeService.update(
       new UpdateRouteCommand({
         ...body,
@@ -125,5 +120,18 @@ export class RouteController {
     }
 
     throw new ForbiddenException('본인의 루트가 아닙니다');
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async delete(@User() user: { id: number }, @Param('id') id: number) {
+    const couple = await this.coupleService.findByUserId(user.id);
+    const route = await this.routeService.getDetail(id);
+
+    if (route.couple.id !== couple.id) {
+      throw new ForbiddenException();
+    }
+
+    await this.routeService.delete(id);
   }
 }

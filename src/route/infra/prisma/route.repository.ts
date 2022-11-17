@@ -87,4 +87,8 @@ export class RouteRepository implements IRouteRepository {
       ])
     )[1];
   }
+
+  public async delete(id: number): Promise<void> {
+    await this.prismaService.route.delete({ where: { id } });
+  }
 }
