@@ -13,7 +13,7 @@ model User {
   code       String      @db.VarChar(30)
   email      String      @unique(map: "user_UN_1") @db.VarChar(30)
   gender     User_gender
-  nickname   String      @unique(map: "user_UN_2") @db.VarChar(30)
+  nickname   String      @db.VarChar(30)
   profileUrl String      @db.VarChar(2083)
   birthday   DateTime    @db.Date
   createdAt  DateTime    @default(now()) @db.DateTime(0)
