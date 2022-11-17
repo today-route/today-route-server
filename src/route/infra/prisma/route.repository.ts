@@ -65,18 +65,6 @@ export class RouteRepository implements IRouteRepository {
   }
 
   public async update(arg: UpdateRouteCommand) {
-    if (arg.routePhoto.length === 0) {
-      return this.prismaService.route.update({
-        where: { id: arg.id },
-        data: {
-          zoomLevel: arg.zoomLevel,
-          title: arg.title,
-          content: arg.content,
-          location: arg.location,
-        },
-      });
-    }
-
     return (
       await this.prismaService.$transaction([
         this.prismaService.routePhoto.deleteMany({
